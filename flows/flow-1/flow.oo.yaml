@@ -1,0 +1,24 @@
+nodes:
+  - node_id: video_preview#1
+    title: "Video preview #1"
+    inputs_from:
+      - handle: video_path
+        from_node:
+          - node_id: float-watermark#1
+            output_handle: media
+    task: oomol-preview::video_preview
+  - node_id: float-watermark#1
+    title: "float-watermark #1"
+    inputs_from:
+      - handle: media
+      - handle: text
+      - handle: outputDir
+      - handle: count
+        value: 1
+      - handle: color
+        value: "#FFFFFF"
+      - handle: opacity
+        value: 0.8
+      - handle: fontSize
+        value: 40
+    task: self::float-watermark

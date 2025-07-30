@@ -1,0 +1,53 @@
+ui:
+  default_width: 450
+inputs_def:
+  - handle: media
+    description: 需要处理的视频文件
+    json_schema:
+      type: string
+      ui:widget: file
+  - handle: text
+    description: 水印文本
+    json_schema:
+      type: string
+  - handle: outputDir
+    json_schema:
+      type: string
+      ui:widget: dir
+    nullable: false
+  - group: Group
+  - handle: count
+    json_schema:
+      type: number
+    value: 1
+    description: 生成几个水印，默认为1个
+  - handle: color
+    description: 水印颜色
+    json_schema:
+      type: string
+      ui:widget: color
+      ui:options:
+        colorType: HEX
+    value: "#FFFFFF"
+  - handle: opacity
+    description: 透明度。0-1。
+    json_schema:
+      type: number
+    value: 0.8
+  - handle: fontSize
+    description: 水印字体大小。12-72
+    json_schema:
+      type: number
+    value: 40
+outputs_def:
+  - handle: media
+    json_schema:
+      type: string
+      ui:widget: file
+executor:
+  name: nodejs
+  options:
+    entry: main.ts
+    spawn: false
+title: float-watermark
+icon: ":skill-icons:typescript:"

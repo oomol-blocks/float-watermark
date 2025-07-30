@@ -1,0 +1,22 @@
+{
+  "nodes": {
+    "video_preview#1": {
+      "contentWidth": 450,
+      "rfNode": {
+        "position": {
+          "x": 2147.202602811678,
+          "y": 157.83146692878782
+        }
+      }
+    },
+    "float-watermark#1": {
+      "contentWidth": 450,
+      "rfNode": {
+        "position": {
+          "x": 1563.612153129786,
+          "y": 157.83146692878782
+        }
+      }
+    }
+  }
+}

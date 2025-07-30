@@ -1,0 +1,15 @@
+version: 0.0.3
+scripts:
+  # Script executed when the container is first loaded
+  # eg: bootstrap: poetry add pandas
+  bootstrap: |
+    npm install
+    poetry install --no-root
+dependencies:
+  oomol-preview: 0.1.0
+name: float-watermark
+description: 一个智能的视频浮动水印处理工具，支持多个水印以不同轨迹在视频上自然飘动，有效防止内容盗用。
+displayName: Float Watermark
+repository: https://github.com/oomol-blocks/float-watermark
+releaseNotes: update task name
+icon: ./icon.png
