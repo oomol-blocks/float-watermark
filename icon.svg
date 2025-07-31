@@ -17,6 +17,17 @@
       <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#0f3460;stop-opacity:1" />
     </linearGradient>
+    
+    <!-- 播放按钮渐变 -->
+    <linearGradient id="playGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.7" />
+    </linearGradient>
+    
+    <!-- 播放按钮阴影 -->
+    <filter id="playShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+    </filter>
   </defs>
   
   <!-- 背景圆角矩形 -->
@@ -31,13 +42,12 @@
   <rect x="28" y="44" width="24" height="3" rx="1" fill="#4299e1" opacity="0.2"/>
   <rect x="28" y="54" width="36" height="3" rx="1" fill="#4299e1" opacity="0.1"/>
   
+  <path d="M44,42 L44,58 L58,50 Z" fill="#ffffff" opacity="0.7" stroke="#ffffff" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+  
   <!-- 飘动的水印文字 -->
-  <text x="55" y="70" font-family="Arial, sans-serif" font-size="10" font-weight="bold" 
+  <text x="65" y="74" font-family="Arial, sans-serif" font-size="10" font-weight="bold" 
         fill="url(#textGradient)" opacity="0.8" text-anchor="middle">
     @水印
-    <animateTransform attributeName="transform" type="translate" 
-                      values="0,0; 8,4; 0,0; -4,6; 0,0" 
-                      dur="4s" repeatCount="indefinite"/>
   </text>
   
   <!-- 右上角小点表示处理状态 -->
