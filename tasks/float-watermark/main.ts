@@ -350,7 +350,7 @@ export class FloatingWatermarkProcessor {
 
   private runFFprobeCommand(args: string[]): Promise<string> {
     return new Promise((resolve, reject) => {
-      const process = spawn(ffprobe, args);
+      const process = spawn(ffprobe.path, args);
       let stdout = '';
       let stderr = '';
 
