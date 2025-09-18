@@ -21,8 +21,7 @@ inputs_def:
     json_schema:
       type: number
     value: 1
-    description:
-      Number of floating watermarks to generate (default: 1)
+    description: Number of floating watermarks to generate (default-1)
   - handle: color
     description: Watermark text color
     json_schema:

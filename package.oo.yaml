@@ -6,9 +6,9 @@ scripts:
     npm install
     poetry install --no-root
 dependencies:
-  oomol-preview: 0.1.0
+  {}
 name: float-watermark
-description: An intelligent video floating watermark processing tool that supports multiple watermarks floating naturally on videos with different trajectories, effectively preventing content theft.
+description: 一个智能的视频浮动水印处理工具，支持多个水印以不同轨迹在视频上自然飘动，有效防止内容盗用。
 displayName: Float Watermark
 repository: https://github.com/oomol-blocks/float-watermark
 releaseNotes: update icon

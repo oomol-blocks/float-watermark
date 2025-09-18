@@ -1,19 +1,11 @@
 nodes:
-  - node_id: video_preview#1
-    title: "Video preview #1"
-    inputs_from:
-      - handle: video_path
-        from_node:
-          - node_id: float-watermark#1
-            output_handle: media
-    task: oomol-preview::video_preview
   - node_id: float-watermark#1
     title: "float-watermark #1"
     inputs_from:
       - handle: media
-        value: /oomol-driver/oomol-storage/oomol-intro_trimmed.mp4
+        value: /oomol-driver/oomol-storage/oomol-intro_trimmed_with_subtitles.mp4
       - handle: text
-        value: "8888"
+        value: adas
       - handle: outputDir
         value: /oomol-driver/oomol-storage/book
       - handle: count
