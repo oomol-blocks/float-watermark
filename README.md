@@ -1,50 +1,111 @@
-# FloatWatermark
+# Float Watermark
 
-一个基于 OOMOL 工作流的视频浮动水印处理工具，支持多个水印以不同轨迹在视频上自然飘动，有效防止内容盗用。
+**An intelligent floating watermark tool for video content protection**
 
-## ✨ 特性
+Float Watermark is a smart video processing tool that adds dynamic, floating watermarks to your videos. Unlike static watermarks that can be easily removed, these watermarks move naturally across your video using different trajectories, making them much more effective at preventing content theft and unauthorized use.
 
-- 🎯 **智能飘动** - 水印按椭圆、水平、垂直等多种轨迹自然移动
-- 🎨 **高度可定制** - 支持文字、颜色、透明度、字体大小等参数调节
-- 🔢 **多水印支持** - 可同时添加 1-10 个水印，各自独立运动
-- 📱 **智能适配** - 根据视频分辨率自动调整水印位置和安全边距
-- ⚡ **高效处理** - 基于FFmpeg，保持视频质量的同时快速处理
-- 🛡️ **版权保护** - 动态水印更难被移除，有效保护内容版权
+## 🎯 What Does It Do?
 
-## 🚀 快速开始
+This tool automatically adds customizable text watermarks to your videos that:
+- **Move dynamically** across the screen in floating patterns
+- **Blend naturally** with your content without being overly intrusive
+- **Provide strong protection** against content piracy and unauthorized distribution
+- **Maintain video quality** while adding security features
 
-1. [官网](https://oomol.com/zh-CN/downloads/)下载 OOMOL
-2. `社区` 模块搜索 `float-watermark`
-3. `Use` 该插件
-4. 在默认工作流中完成参数的填写
-5. 运行等待结果
+## 🎬 Perfect For
 
-## ⚙️ 配置参数
+- **Content Creators**: Protect your original video content on social media platforms
+- **Businesses**: Secure promotional videos, tutorials, and marketing materials
+- **Educators**: Protect educational content and online course materials
+- **Media Companies**: Add branding and anti-piracy protection to video assets
+- **Anyone**: Who wants to protect their video content from unauthorized use
 
-| 参数 | 类型 | 范围 | 默认值 | 说明 |
-|------|------|------|--------|------|
-| `media` | string | - | - | 视频文件 |
-| `text` | string | - | - | 水印文字内容 |
-| `outputDir` | string | - | - | 输出路径 |
-| `count` | number | 1-10 | 1 | 水印数量 |
-| `color` | string | - | #FFFFFF | 文字颜色 |
-| `opacity` | number | 0.1-1.0 | 0.8 | 透明度 |
-| `fontSize` | number | 8-72 | 40 | 字体大小 |
+## 🚀 How to Use
 
-## 🎨 水印运动模式
+### Getting Started
+1. Download OOMOL from the [official website](https://oomol.com/downloads/)
+2. Search for `float-watermark` in the Community section
+3. Click `Use` to add this block to your workspace
+4. Configure the parameters in the default workflow
+5. Run the workflow and wait for results
 
-系统会自动为每个水印分配不同的运动模式：
+### Available Block: Float Watermark
 
-- **水平运动** (30%概率) - 主要沿水平方向飘动，带微小垂直抖动
-- **垂直运动** (30%概率) - 主要沿垂直方向飘动，带微小水平抖动  
-- **椭圆运动** (40%概率) - 复合轨迹，形成自然的椭圆飘动
+The main component of this tool is the **Float Watermark** block, which processes your videos and adds floating watermarks.
 
-每个水印都有独立的随机种子，确保运动轨迹不重复。
+#### Input Requirements:
+- **Video File**: The video you want to protect (supports common formats like MP4, MOV, AVI)
+- **Watermark Text**: The text you want to display as a watermark
+- **Output Directory**: Where you want to save the processed video
 
-## 🆘 支持
+#### Customization Options:
+- **Number of Watermarks**: Choose how many floating watermarks to add (1-10, default: 1)
+- **Color**: Select watermark color using a color picker (default: white #FFFFFF)
+- **Transparency**: Adjust opacity from 0.1 to 1.0 (default: 0.8 for subtle visibility)
+- **Font Size**: Set text size between 8-72 pixels (default: 40)
 
-如果遇到问题或需要帮助：
+#### Output:
+- A new video file with floating watermarks applied
+- Maintains original video quality and format
+- Ready for distribution with enhanced content protection
 
-- 📧 邮箱: honeysyt@gmail.com
-- 🐛 问题反馈: [GitHub Issues](https://github.com/oomol-blocks/float-watermark/issues)
-- 📖 微信群支持: [微信群支持](https://oomol.com/img/qrcode@3x.png)
+## 🎨 Watermark Movement Patterns
+
+The system automatically assigns different movement patterns to each watermark:
+
+- **Horizontal Movement** (30% probability) - Primarily moves horizontally with slight vertical variation
+- **Vertical Movement** (30% probability) - Primarily moves vertically with slight horizontal variation
+- **Elliptical Movement** (40% probability) - Complex trajectory forming natural elliptical floating patterns
+
+Each watermark has an independent random seed, ensuring unique movement trajectories that don't overlap.
+
+## ✨ Key Benefits
+
+- **🎯 Smart Floating**: Watermarks move in elliptical, horizontal, and vertical trajectories for natural movement
+- **🎨 Highly Customizable**: Adjust text, color, transparency, and font size to match your needs
+- **🔢 Multiple Watermarks**: Add 1-10 watermarks simultaneously, each with independent movement
+- **📱 Smart Adaptation**: Automatically adjusts watermark position and safe margins based on video resolution
+- **⚡ Efficient Processing**: Built on FFmpeg for fast processing while maintaining video quality
+- **🛡️ Copyright Protection**: Dynamic watermarks are much harder to remove, effectively protecting content copyright
+
+## 🎬 Use Cases
+
+### Social Media Content
+Protect your original videos when sharing on platforms like YouTube, TikTok, or Instagram.
+
+### Business Materials
+Add company branding and protection to:
+- Product demonstrations
+- Training videos
+- Marketing content
+- Client presentations
+
+### Educational Content
+Secure your:
+- Online course materials
+- Tutorial videos
+- Lecture recordings
+- Educational demonstrations
+
+### Creative Projects
+Protect your:
+- Short films
+- Music videos
+- Art showcases
+- Portfolio pieces
+
+## 🛠 Sample Workflow
+
+A basic workflow is included that demonstrates how to:
+1. **Process** your video with floating watermarks using the Float Watermark block
+2. **Preview** the result using the video preview component to verify watermark placement and movement
+
+This workflow helps you test different settings and see the results immediately before finalizing your protected video.
+
+## 🆘 Support
+
+If you encounter any issues or need assistance:
+
+- 📧 Email: honeysyt@gmail.com
+- 🐛 Report Issues: [GitHub Issues](https://github.com/oomol-blocks/float-watermark/issues)
+- 📖 WeChat Support: [WeChat Group](https://oomol.com/img/qrcode@3x.png)

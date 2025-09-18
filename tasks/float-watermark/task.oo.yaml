@@ -2,15 +2,16 @@ ui:
   default_width: 450
 inputs_def:
   - handle: media
-    description: 需要处理的视频文件
+    description: Video file to be processed
     json_schema:
       type: string
       ui:widget: file
   - handle: text
-    description: 水印文本
+    description: Watermark text content
     json_schema:
       type: string
   - handle: outputDir
+    description: Output directory for processed video
     json_schema:
       type: string
       ui:widget: dir
@@ -20,9 +21,10 @@ inputs_def:
     json_schema:
       type: number
     value: 1
-    description: 生成几个水印，默认为1个
+    description:
+      Number of floating watermarks to generate (default: 1)
   - handle: color
-    description: 水印颜色
+    description: Watermark text color
     json_schema:
       type: string
       ui:widget: color
@@ -30,17 +32,18 @@ inputs_def:
         colorType: HEX
     value: "#FFFFFF"
   - handle: opacity
-    description: 透明度。0-1。
+    description: Watermark transparency (0-1)
     json_schema:
       type: number
     value: 0.8
   - handle: fontSize
-    description: 水印字体大小。12-72
+    description: Watermark font size (12-72 pixels)
     json_schema:
       type: number
     value: 40
 outputs_def:
   - handle: media
+    description: Processed video file with floating watermarks
     json_schema:
       type: string
       ui:widget: file
@@ -50,4 +53,8 @@ executor:
     entry: main.ts
     spawn: false
 title: float-watermark
-icon: ":skill-icons:typescript:"
+icon: ":carbon:flow-data:"
+description: "Adds intelligent floating watermarks to videos with customizable
+  text, color, and movement patterns. Watermarks move dynamically across the
+  video using different trajectories to provide effective content protection
+  against piracy and unauthorized use."

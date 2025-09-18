@@ -11,8 +11,11 @@ nodes:
     title: "float-watermark #1"
     inputs_from:
       - handle: media
+        value: /oomol-driver/oomol-storage/oomol-intro_trimmed.mp4
       - handle: text
+        value: "8888"
       - handle: outputDir
+        value: /oomol-driver/oomol-storage/book
       - handle: count
         value: 1
       - handle: color

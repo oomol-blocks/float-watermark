@@ -44,17 +44,17 @@ export default async function (
   }
 };
 
-// 水印配置接口
+// Watermark configuration interface
 export interface WatermarkConfig {
-  text: string;             // 水印文字
-  fontSize: number;         // 字体大小 12-72
-  color: string;            // 颜色 'white', 'black', 'red', 'yellow' 等
-  opacity: number;          // 透明度 0.1-1.0
-  speed: number;            // 移动速度 0.1-5.0
-  amplitude: number;        // 飘动幅度 10-200
-  count: number;            // 水印数量 1-10
-  fontFamily?: string;      // 字体文件路径（可选）
-  includeTime?: boolean;    // 是否包含时间戳
+  text: string;             // Watermark text
+  fontSize: number;         // Font size 12-72
+  color: string;            // Color 'white', 'black', 'red', 'yellow' etc
+  opacity: number;          // Opacity 0.1-1.0
+  speed: number;            // Movement speed 0.1-5.0
+  amplitude: number;        // Float amplitude 10-200
+  count: number;            // Watermark count 1-10
+  fontFamily?: string;      // Font file path (optional)
+  includeTime?: boolean;    // Include timestamp
 }
 
 export class FloatingWatermarkProcessor {
@@ -64,28 +64,28 @@ export class FloatingWatermarkProcessor {
     config: WatermarkConfig
   ): Promise<void> {
 
-    // 验证输入文件
+    // Validate input file
     try {
       await fs.access(inputPath);
     } catch {
-      throw new Error(`输入文件不存在: ${inputPath}`);
+      throw new Error(`Input file does not exist: ${inputPath}`);
     }
 
-    // 确保输出目录存在
+    // Ensure output directory exists
     const outputDir = path.dirname(outputPath);
     try {
       await fs.mkdir(outputDir, { recursive: true });
     } catch (error) {
-      // 目录可能已存在，忽略错误
+      // Directory may already exist, ignore error
     }
 
-    // 验证配置
+    // Validate configuration
     this.validateConfig(config);
 
     const args = await this.buildFFmpegArgs(inputPath, outputPath, config);
     await this.runFFmpegCommand(args);
 
-    console.log(`✓ 视频处理完成: ${outputPath}`);
+    console.log(`✓ Video processing completed: ${outputPath}`);
   }
 
   private async buildFFmpegArgs(
@@ -93,10 +93,10 @@ export class FloatingWatermarkProcessor {
     outputPath: string,
     config: WatermarkConfig
   ): Promise<string[]> {
-    // 获取视频分辨率
+    // Get video resolution
     const videoInfo = await this.getVideoInfo(inputPath);
 
-    // 生成飘动水印滤镜
+    // Generate floating watermark filter
     const watermarkFilter = this.generateFloatingWatermarkFilter(config, videoInfo);
 
     const args = [
@@ -116,21 +116,21 @@ export class FloatingWatermarkProcessor {
   private generateFloatingWatermarkFilter(config: WatermarkConfig, videoInfo?: { width: number; height: number }): string {
     const filters: string[] = [];
 
-    // 预估文字尺寸，用于避免重叠
+    // Estimate text size to avoid overlap
     const estimatedTextWidth = config.fontSize * config.text.length * 0.6;
     const estimatedTextHeight = config.fontSize * 1.2;
 
-    // 存储已分配的区域，避免重叠
+    // Store allocated areas to avoid overlap
     const occupiedAreas: Array<{ x: number, y: number, width: number, height: number }> = [];
 
     for (let i = 0; i < config.count; i++) {
-      // 为每个水印生成不同的相位和种子
+      // Generate different phase and seed for each watermark
       const phaseOffset = (i * Math.PI * 2) / config.count;
       const randomSeed = Math.random() * Math.PI * 2;
       const seedX = i * 1.618 + randomSeed;
       const seedY = i * 2.414 + randomSeed * 0.7;
 
-      // 随机飘动方向和速度变化
+      // Random floating direction and speed variation
       const randomDirectionX = Math.random() > 0.5 ? 1 : -1;
       const randomDirectionY = Math.random() > 0.5 ? 1 : -1;
       const randomSpeedX = 0.3 + Math.random() * 0.4; // (0.3-0.7)
@@ -138,48 +138,48 @@ export class FloatingWatermarkProcessor {
       const randomAmplitudeX = 0.8 + Math.random() * 0.4; // (0.8-1.2)
       const randomAmplitudeY = 0.8 + Math.random() * 0.4; // (0.8-1.2)
 
-      // 计算安全边距和飘动范围
-      let amplitudePercent = 0.05; // 默认5%的飘动范围
-      let safeMarginXPercent = 0.05; // 默认5%的边距
+      // Calculate safe margins and floating range
+      let amplitudePercent = 0.05; // Default 5% floating range
+      let safeMarginXPercent = 0.05; // Default 5% margin
       let safeMarginYPercent = 0.05;
 
       if (videoInfo) {
         const { width, height } = videoInfo;
 
-        // 将amplitude像素值转换为屏幕百分比
+        // Convert amplitude pixel value to screen percentage
         amplitudePercent = config.amplitude / Math.min(width, height);
-        amplitudePercent = Math.min(amplitudePercent, 0.15); // 最大不超过15%
+        amplitudePercent = Math.min(amplitudePercent, 0.15); // Maximum 15%
 
-        // 计算文字安全边距
+        // Calculate text safe margins
         safeMarginXPercent = (estimatedTextWidth + config.amplitude + 20) / width;
         safeMarginYPercent = (estimatedTextHeight + config.amplitude + 20) / height;
 
-        console.log(`水印${i + 1}: 预估文字尺寸 ${estimatedTextWidth}x${estimatedTextHeight}px`);
-        console.log(`飘动幅度: ${config.amplitude}px = ${(amplitudePercent * 100).toFixed(1)}%`);
+        console.log(`Watermark ${i + 1}: Estimated text size ${estimatedTextWidth}x${estimatedTextHeight}px`);
+        console.log(`Float amplitude: ${config.amplitude}px = ${(amplitudePercent * 100).toFixed(1)}%`);
       }
 
-      // 随机选择屏幕中心位置，确保不重叠且不超出边界
+      // Randomly select screen center position, ensure no overlap and within bounds
       let centerXPercent: number;
       let centerYPercent: number;
       let attempts = 0;
       const maxAttempts = 50;
 
       do {
-        // 在安全区域内随机选择中心点
+        // Randomly select center point within safe area
         centerXPercent = safeMarginXPercent + Math.random() * (1 - 2 * safeMarginXPercent);
         centerYPercent = safeMarginYPercent + Math.random() * (1 - 2 * safeMarginYPercent);
 
         attempts++;
 
-        // 如果尝试次数过多，就不再检查重叠，直接使用当前位置
+        // If too many attempts, stop checking overlap and use current position
         if (attempts >= maxAttempts) {
-          console.log(`水印${i + 1}: 超过最大尝试次数，使用当前位置`);
+          console.log(`Watermark ${i + 1}: Exceeded maximum attempts, using current position`);
           break;
         }
 
       } while (this.checkOverlap(centerXPercent, centerYPercent, amplitudePercent, estimatedTextWidth, estimatedTextHeight, occupiedAreas, videoInfo));
 
-      // 记录当前水印占用的区域
+      // Record current watermark occupied area
       const occupiedWidth = videoInfo ? (estimatedTextWidth + config.amplitude * 2) / videoInfo.width : 0.2;
       const occupiedHeight = videoInfo ? (estimatedTextHeight + config.amplitude * 2) / videoInfo.height : 0.15;
 
@@ -190,40 +190,40 @@ export class FloatingWatermarkProcessor {
         height: occupiedHeight
       });
 
-      // 随机运动模式：水平、竖直、或复合运动
+      // Random motion mode: horizontal, vertical, or composite motion
       const motionType = Math.random();
       let xExpression: string;
       let yExpression: string;
 
       if (motionType < 0.3) {
-        // 30% 概率：主要水平运动
+        // 30% probability: mainly horizontal motion
         xExpression = `w*${centerXPercent}+w*${amplitudePercent * randomAmplitudeX}*${randomDirectionX}*sin(${config.speed * randomSpeedX}*t+${phaseOffset}+${seedX})+w*${amplitudePercent * 0.2 * randomAmplitudeX}*sin(${config.speed * randomSpeedX * 1.7}*t+${seedX})`;
         yExpression = `h*${centerYPercent}+h*${amplitudePercent * 0.1 * randomAmplitudeY}*${randomDirectionY}*sin(${config.speed * randomSpeedY * 2.1}*t+${seedY})`;
       } else if (motionType < 0.6) {
-        // 30% 概率：主要竖直运动  
+        // 30% probability: mainly vertical motion  
         xExpression = `w*${centerXPercent}+w*${amplitudePercent * 0.1 * randomAmplitudeX}*${randomDirectionX}*sin(${config.speed * randomSpeedX * 1.9}*t+${seedX})`;
         yExpression = `h*${centerYPercent}+h*${amplitudePercent * randomAmplitudeY}*${randomDirectionY}*sin(${config.speed * randomSpeedY}*t+${phaseOffset}+${seedY})+h*${amplitudePercent * 0.3 * randomAmplitudeY}*sin(${config.speed * randomSpeedY * 1.4}*t+${seedY})`;
       } else {
-        // 40% 概率：复合运动（椭圆轨迹）
+        // 40% probability: composite motion (elliptical trajectory)
         xExpression = `w*${centerXPercent}+w*${amplitudePercent * randomAmplitudeX}*${randomDirectionX}*sin(${config.speed * randomSpeedX}*t+${phaseOffset}+${seedX})+w*${amplitudePercent * 0.3 * randomAmplitudeX}*${randomDirectionX}*sin(${config.speed * randomSpeedX * 1.7}*t+${seedX})`;
         yExpression = `h*${centerYPercent}+h*${amplitudePercent * randomAmplitudeY}*${randomDirectionY}*cos(${config.speed * randomSpeedY * 0.8}*t+${phaseOffset}+${seedY})+h*${amplitudePercent * 0.4 * randomAmplitudeY}*${randomDirectionY}*cos(${config.speed * randomSpeedY * 1.3}*t+${seedY})`;
       }
 
-      // 决定显示文本
+      // Determine display text
       let displayText = config.text;
       if (config.includeTime) {
         displayText = `${config.text} %{localtime:%H\\:%M\\:%S}`;
       }
 
-      // 字体设置
+      // Font settings
       const fontSettings = config.fontFamily ? `:fontfile='${config.fontFamily}'` : '';
 
-      // 构建单个水印滤镜
+      // Build single watermark filter
       const watermarkFilter = `drawtext=text='${displayText}':x='${xExpression}':y='${yExpression}':fontsize=${config.fontSize}:fontcolor=${config.color}@${config.opacity}:shadowcolor=black@0.4:shadowx=1:shadowy=1${fontSettings}`;
 
       filters.push(watermarkFilter);
 
-      console.log(`水印${i + 1}: 中心位置 (${(centerXPercent * 100).toFixed(1)}%, ${(centerYPercent * 100).toFixed(1)}%)`);
+      console.log(`Watermark ${i + 1}: Center position (${(centerXPercent * 100).toFixed(1)}%, ${(centerYPercent * 100).toFixed(1)}%)`);
     }
 
     return filters.join(',');
@@ -238,12 +238,12 @@ export class FloatingWatermarkProcessor {
     occupiedAreas: Array<{ x: number, y: number, width: number, height: number }>,
     videoInfo?: { width: number; height: number }
   ): boolean {
-    // 如果没有已占用区域，直接返回false
+    // If no occupied areas, return false directly
     if (occupiedAreas.length === 0) {
       return false;
     }
 
-    // 计算当前水印的占用区域
+    // Calculate current watermark occupied area
     const currentWidth = videoInfo ? (textWidth + amplitude * 2) / videoInfo.width : 0.2;
     const currentHeight = videoInfo ? (textHeight + amplitude * 2) / videoInfo.height : 0.15;
 
@@ -254,7 +254,7 @@ export class FloatingWatermarkProcessor {
       height: currentHeight
     };
 
-    // 检查与已有区域是否重叠
+    // Check overlap with existing areas
     for (const area of occupiedAreas) {
       if (this.isRectangleOverlap(currentArea, area)) {
         return true;
@@ -268,7 +268,7 @@ export class FloatingWatermarkProcessor {
     rect1: { x: number, y: number, width: number, height: number },
     rect2: { x: number, y: number, width: number, height: number }
   ): boolean {
-    // 两个矩形不重叠的条件：rect1在rect2的右边 或 rect1在rect2的左边 或 rect1在rect2的下方 或 rect1在rect2的上方
+    // Conditions for two rectangles not overlapping: rect1 is to the right of rect2 or rect1 is to the left of rect2 or rect1 is below rect2 or rect1 is above rect2
     return !(
       rect1.x >= rect2.x + rect2.width ||
       rect2.x >= rect1.x + rect1.width ||
@@ -290,11 +290,11 @@ export class FloatingWatermarkProcessor {
         const dataStr = data.toString();
         stderr += dataStr;
 
-        // 解析进度信息
+        // Parse progress information
         const progressMatch = dataStr.match(/time=(\d{2}):(\d{2}):(\d{2}\.\d{2})/);
         if (progressMatch) {
           const [, hours, minutes, seconds] = progressMatch;
-          console.log(`处理时间: ${hours}:${minutes}:${seconds}`);
+          console.log(`Processing time: ${hours}:${minutes}:${seconds}`);
         }
 
         console.log('FFmpeg stderr:', dataStr);
@@ -318,7 +318,7 @@ export class FloatingWatermarkProcessor {
     });
   }
 
-  // 添加获取视频信息的方法
+  // Add method to get video information
   private async getVideoInfo(inputPath: string): Promise<{ width: number; height: number; duration: number }> {
     const args = [
       '-v', 'quiet',
@@ -343,7 +343,7 @@ export class FloatingWatermarkProcessor {
 
       return { width, height, duration };
     } catch (error) {
-      console.warn(`获取视频信息失败，使用默认值: ${error.message}`);
+      console.warn(`Failed to get video info, using default values: ${error.message}`);
       return { width: 1920, height: 1080, duration: 0 };
     }
   }
@@ -380,31 +380,31 @@ export class FloatingWatermarkProcessor {
     const errors: string[] = [];
 
     if (!config.text || config.text.trim().length === 0) {
-      errors.push('水印文本不能为空');
+      errors.push('Watermark text cannot be empty');
     }
 
     if (config.fontSize < 8 || config.fontSize > 72) {
-      errors.push('字体大小应在 8-72 之间');
+      errors.push('Font size should be between 8-72');
     }
 
     if (config.opacity < 0.1 || config.opacity > 1.0) {
-      errors.push('透明度应在 0.1-1.0 之间');
+      errors.push('Opacity should be between 0.1-1.0');
     }
 
     if (config.speed < 0.1 || config.speed > 5.0) {
-      errors.push('移动速度应在 0.1-5.0 之间');
+      errors.push('Movement speed should be between 0.1-5.0');
     }
 
     if (config.amplitude < 10 || config.amplitude > 200) {
-      errors.push('飘动幅度应在 10-200 之间');
+      errors.push('Float amplitude should be between 10-200');
     }
 
     if (config.count < 1 || config.count > 10) {
-      errors.push('水印数量应在 1-10 之间');
+      errors.push('Watermark count should be between 1-10');
     }
 
     if (errors.length > 0) {
-      throw new Error(`配置错误: ${errors.join(', ')}`);
+      throw new Error(`Configuration error: ${errors.join(', ')}`);
     }
   }
 }
